@@ -1,77 +1,28 @@
-# YakNet Accessibility Console
-
-Web sitelerinizdeki erişilebilirlik (WCAG) hatalarını otomatik olarak tarayan, raporlayan ve hatanın kaynağını (dosya ve satır numarası) tespit etmeye çalışan PHP kütüphanesi.
-
-**Geliştirici:** YakNet Bilişim
-
-## Özellikler
-- **Otomatik Tarama:** Sayfa çıktılarını analiz eder.
-- **Kaynak Tespiti:** Hatanın hangi view/template dosyasında olduğunu bulmaya çalışır.
-- **Görsel Raporlama:** Sayfanın altına "Fatal Error" stilinde detaylı bir rapor paneli ekler.
-- **Dinamik İçerik Desteği:** Döngüler ve dinamik içerikler içindeki hataları yakalar.
-
-## Kurulum
-
-### Yöntem 1: Composer (Önerilen)
-Bu kütüphane şu an yerel/private bir paket olduğu için `composer.json` dosyanıza şu şekilde ekleyin:
-
-```json
-"repositories": [
-    {
-        "type": "path",
-        "url": "./yaknet/accessibility-console" 
-    }
-],
-"require": {
-    "yaknet/accessibility-console": "@dev"
-}
-```
-*Not: `url` kısmını kütüphaneyi indirdiğiniz klasöre göre düzenleyin.*
-
-### Yöntem 2: Manuel (Hosting / FTP)
-Composer kullanamıyorsanız:
-1. `src` klasörünü sunucunuza yükleyin.
-2. Projenize `autoload.php` dosyasını dahil edin:
-
-```php
+YakNet Accessibility Console
+Web sitelerinizdeki erişilebilirlik (WCAG 2.1) hatalarını otomatik olarak tarayan, raporlayan ve hatanın kaynağını (dosya ve satır numarası) tespit eden profesyonel bir PHP kütüphanesidir.
+Geliştirici: YakNet Bilişim
+Özellikler
+• 
+Kapsamlı Tarama: WCAG 2.1 standartlarına göre görseller, formlar, renk kontrastı ve başlık hiyerarşisi gibi birçok kuralı denetler.
+• 
+Akıllı Kaynak Tespiti: Tespit edilen hatanın projenizdeki hangi dosyada ve hangi satırda olduğunu otomatik olarak bulur.
+• 
+Görsel Raporlama: Hataları, PHP'nin yerleşik hata arayüzüne benzer şık bir panel ile sayfanın altında sunar.
+• 
+Ortam Kontrolü: Middleware desteği sayesinde sadece geliştirme ortamında çalışacak veya özel bir parametre ile tetiklenecek şekilde yapılandırılabilir.
+Kurulum
+Yöntem 1: Composer (Önerilen)
+Terminalinizde şu komutu çalıştırarak kütüphaneyi projenize dahil edebilirsiniz:
+composer require yaknet/accessibility-console
+Yöntem 2: Manuel (Hosting / FTP)
+Composer kullanamıyorsanız src klasörünü projenize yükleyip şu şekilde dahil edebilirsiniz:
 require_once 'path/to/src/accessibility-console-autoload.php';
-```
-
-## Kullanım
-
+Kullanım
 En basit haliyle, HTML çıktısını ekrana basmadan önce tarayıcıdan geçirin:
-
-```php
-use YakNet\AccessibilityConsole\Scanner;
-use YakNet\AccessibilityConsole\Reporter\HtmlReporter;
-use YakNet\AccessibilityConsole\Rules\StandardRules;
-
-// 1. Tarayıcıyı Başlat
-$scanner = new Scanner();
-
-// 2. Kuralları Ekle (Hepsini tek seferde ekle)
-StandardRules::apply($scanner);
-
-/* Veya tek tek ekleyebilirsiniz:
-$scanner->addRule(new ImgAltText());
-...
-*/
-
-// 3. HTML'i Tara
-$html = "<html>...</html>"; // Sitenizin çıktısı
-$violations = $scanner->scan($html);
-
-// 4. Raporu Göster
-if (!empty($violations)) {
-    $reporter = new HtmlReporter();
-    
-    // İsteğe bağlı: Başarılı olduğunda da yeşil widget göster (varsayılan: false)
-    // $reporter->setShowSuccess(true);
-
-    echo $reporter->render($violations);
-}
-```
-
-## Lisans
-Bu yazılım **YakNet Bilişim** tarafından geliştirilmiştir.
-İstediğiniz gibi değiştirebilir, kullanabilir ve dağıtabilirsiniz (MIT License).
+use YakNet\AccessibilityConsole\Scanner; use YakNet\AccessibilityConsole\Reporter\HtmlReporter; use YakNet\AccessibilityConsole\Rules\StandardRules; use YakNet\AccessibilityConsole\SourceLocator;
+// 1. Tarayıcıyı ve Kuralları Hazırla $scanner = new Scanner(); StandardRules::apply($scanner);
+// 2. HTML Çıktısını Tara $html = "<html>...</html>"; $violations = $scanner->scan($html);
+// 3. Kaynak Dosyaları Belirle (Opsiyonel) $locator = new SourceLocator(DIR . '/views'); foreach ($violations as $violation) { $location = $locator->locate($violation->snippet); if ($location) { $violation->setSourceLocation($location['file'], $location['line']); } }
+// 4. Raporu Ekrana Bas if (!empty($violations)) { $reporter = new HtmlReporter(); echo $reporter->render($violations); }
+Lisans
+Bu yazılım YakNet Bilişim tarafından geliştirilmiştir. MIT Lisansı kapsamında özgürce kullanılabilir ve dağıtılabilir.
