@@ -1,0 +1,36 @@
+{
+    "name": "yaknet/accessibility-console",
+    "description": "A WCAG 2.1 accessibility scanner that traces errors back to source files.",
+    "keywords": [
+        "accessibility",
+        "wcag",
+        "a11y",
+        "scanner",
+        "debug",
+        "yaknet"
+    ],
+    "homepage": "https://forum.yak.net.tr",
+    "support": {
+        "email": "yaknetbilisim@gmail.com"
+    },
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "YakNet Bilişim",
+            "email": "dev@yak.net.tr",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "ext-dom": "*",
+        "ext-libxml": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "YakNet\\AccessibilityConsole\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
